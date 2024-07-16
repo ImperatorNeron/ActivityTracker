@@ -13,6 +13,8 @@ pydantic = "^2.8.2"
 sqlalchemy = "^2.0.31"
 alembic = "^1.13.2"
 poetry = "^1.8.3"
+fastapi-users = {extras = ["sqlalchemy"], version = "^13.0.0"}
+asyncpg = "^0.29.0"
 
 
 [build-system]
