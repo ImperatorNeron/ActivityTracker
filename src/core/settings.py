@@ -1,16 +1,12 @@
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
 
 
-class DatabaseSettings(BaseSettings):
-    DB_USER: str
-    DB_PASS: str
-    DB_HOST: str
-    DB_PORT: int
-    DB_NAME: str
+class DatabaseSettings(BaseModel):
+    url: str
     echo: bool = False
     echo_pool: bool = False
     pool_size: int = 50
@@ -24,26 +20,23 @@ class DatabaseSettings(BaseSettings):
         "pk": "pk_%(table_name)s",
     }
 
-    @property
-    def url(self):
-        return (
-            f"postgresql+asyncpg://"
-            f"{self.DB_USER}:{self.DB_PASS}"
-            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        )
-
-    class Config:
-        env_file = ".env"
-
 
 class AccessTokenSettings(BaseModel):
     lifetime_seconds: int = 3600
+    reset_password_token_secret: str
+    verification_token_secret: str
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=(".env.template", ".env"),
+        case_sensitive=False,
+        env_nested_delimiter="__",
+        env_prefix="APP_CONFIG__",
+    )
     api_version_prefix: str = "/api/v1"
-    database: DatabaseSettings = DatabaseSettings()
-    access_token: AccessTokenSettings = AccessTokenSettings()
+    database: DatabaseSettings
+    access_token: AccessTokenSettings
 
 
 settings = Settings()
