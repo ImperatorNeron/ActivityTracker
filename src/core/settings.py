@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
 load_dotenv()
@@ -35,9 +36,14 @@ class DatabaseSettings(BaseSettings):
         env_file = ".env"
 
 
+class AccessTokenSettings(BaseModel):
+    lifetime_seconds: int = 3600
+
+
 class Settings(BaseSettings):
     api_version_prefix: str = "/api/v1"
     database: DatabaseSettings = DatabaseSettings()
+    access_token: AccessTokenSettings = AccessTokenSettings()
 
 
 settings = Settings()
