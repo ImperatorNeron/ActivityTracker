@@ -11,6 +11,9 @@ class DatabaseSettings(BaseSettings):
     DB_PORT: int
     DB_NAME: str
     echo: bool = False
+    echo_pool: bool = False
+    pool_size: int = 50
+    max_overflow: int = 10
 
     naming_convention: dict[str, str] = {
         "ix": "ix_%(column_0_label)s",
