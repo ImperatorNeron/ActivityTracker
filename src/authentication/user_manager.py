@@ -19,7 +19,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_register(
         self,
         user: User,
-        request: Request | None = None,
+        request: Optional["Request"] = None,
     ):
         log.warning(f"User %r has registered.", user.id)
 
@@ -27,7 +27,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         self,
         user: User,
         token: str,
-        request: Request | None = None,
+        request: Optional["Request"] = None,
     ):
         log.warning(
             f"User %r has forgot their password. Reset token: %r", user.id, token
@@ -37,7 +37,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         self,
         user: User,
         token: str,
-        request: Request | None = None,
+        request: Optional["Request"] = None,
     ):
         log.warning(
             f"Verification requested for user %r. Verification token: %r",
