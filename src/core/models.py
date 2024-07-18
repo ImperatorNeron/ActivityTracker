@@ -8,8 +8,6 @@ class TaskTrackerBaseModel(DeclarativeBase):
 
     metadata = MetaData(naming_convention=settings.database.naming_convention)
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
-
     @declared_attr.directive
     def __tablename__(self) -> str:
         return f"{self.__name__.lower()}s"
