@@ -6,7 +6,7 @@ from src.authentication.dependencies.fastapi_users_routers import (
 )
 from src.core.database_helper import database_helper
 from src.uom import crud
-from src.uom.schemas import UOMRead, UOMCreate
+from src.uom.schemas import UOMRead, UOMCreate, UOMPartialUpdate
 from src.user.models import User
 
 if TYPE_CHECKING:
@@ -41,3 +41,19 @@ async def add_uom(
     ],
 ):
     return await crud.add_uom(uom, session)
+
+
+@router.patch("/{uom_id}", response_model=UOMRead)
+async def update_uom(
+    uom: UOMPartialUpdate,
+    uom_id: int,
+    session: Annotated[
+        "AsyncSession",
+        Depends(database_helper.session_getter),
+    ],
+    current_superuser: Annotated[  # noqa
+        User,
+        Depends(current_active_super_user),
+    ],
+):
+    return await crud.partial_update_uom(uom, uom_id, session)
