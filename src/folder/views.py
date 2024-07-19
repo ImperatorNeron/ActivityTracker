@@ -46,6 +46,25 @@ async def create_folder(
     )
 
 
+@router.get("/{current_folder_id}", response_model=FolderRead)
+async def get_folder(
+    current_folder_id: int,
+    session: Annotated[
+        AsyncSession,
+        Depends(database_helper.session_getter),
+    ],
+    current_user: Annotated[  # noqa
+        User,
+        Depends(current_active_user),
+    ],
+):
+    return await crud.get_folder_by_id(
+        current_folder_id,
+        current_user.id,
+        session,
+    )
+
+
 @router.patch("/{current_folder_id}", response_model=FolderRead)
 async def update_folder(
     folder_in: FolderUpdate,
