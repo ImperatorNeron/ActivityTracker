@@ -6,11 +6,12 @@ from pydantic import BaseModel, Field
 
 class FolderBase(BaseModel):
     title: str = Field(max_length=100)
-    description: Optional[str]
+    description: Optional[str] = None
     tasks_quantity: int = Field(ge=0, default=0)
 
 
 class FolderRead(FolderBase):
+    id: int = Field(ge=0)
     creation_date: datetime
 
 
@@ -19,4 +20,7 @@ class FolderCreate(FolderBase):
 
 
 class FolderUpdate(FolderBase):
-    pass
+    title: Optional[str] = None
+    description: Optional[str] = None
+    tasks_quantity: Optional[int] = None
+
