@@ -1,8 +1,8 @@
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 
 from sqlalchemy import select
 from src.folder.models import Folder
-from src.folder.schemas import FolderCreate
+from src.folder.schemas import FolderCreate, FolderUpdate
 
 if TYPE_CHECKING:
     from sqlalchemy import Result
@@ -25,3 +25,26 @@ async def create_folder(
     session.add(folder)
     await session.commit()
     return folder
+
+
+async def update_folder(
+    current_folder_id: int,
+    upd_folder: FolderUpdate,
+    session: "AsyncSession",
+):
+    current_folder = await get_folder_by_id(current_folder_id, session)
+    # exclude_unset for removing such things: title=None, time=None
+    for key, value in upd_folder.model_dump(exclude_unset=True).items():
+        setattr(current_folder, key, value)
+    await session.commit()
+    return current_folder
+
+
+async def get_folder_by_id(
+    current_folder_id: int,
+    session: "AsyncSession",
+) -> Optional[Folder]:
+    return await session.get(
+        Folder,
+        current_folder_id,
+    )
