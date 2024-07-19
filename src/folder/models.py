@@ -4,14 +4,13 @@ from sqlalchemy import String, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from src import TaskTrackerBaseModel
-from src.core.mixins import UserRelationMixin
+from src.core.mixins import UserRelationMixin, IdIntPkMixin
 
 
-class Folder(TaskTrackerBaseModel, UserRelationMixin):
+class Folder(TaskTrackerBaseModel, UserRelationMixin, IdIntPkMixin):
     _back_populates = "folders"
-    _primary_key = True
 
-    title: Mapped[str] = mapped_column("title", String(100), primary_key=True)
+    title: Mapped[str] = mapped_column("title", String(100), unique=True)
     description: Mapped[str] = mapped_column("description", nullable=True)
     tasks_quantity: Mapped[int] = mapped_column("tasks_quantity", default=0, server_default="0")
     creation_date: Mapped[datetime] = mapped_column(
