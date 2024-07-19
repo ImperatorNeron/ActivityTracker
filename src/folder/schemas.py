@@ -8,12 +8,10 @@ class FolderBase(BaseModel):
     title: str = Field(max_length=100)
     description: Optional[str]
     tasks_quantity: int = Field(ge=0, default=0)
-    creation_date: datetime = Field(default_factory=datetime.utcnow)
-    user_id: int
 
 
 class FolderRead(FolderBase):
-    pass
+    creation_date: datetime
 
 
 class FolderCreate(FolderBase):
