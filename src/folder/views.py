@@ -39,7 +39,11 @@ async def create_folder(
         Depends(current_active_user),
     ],
 ):
-    return await crud.create_folder(folder_in, current_user.id, session)
+    return await crud.create_folder(
+        folder_in,
+        current_user.id,
+        session,
+    )
 
 
 @router.patch("/{current_folder_id}", response_model=FolderRead)
@@ -55,4 +59,9 @@ async def update_folder(
         Depends(current_active_user),
     ],
 ):
-    return await crud.update_folder(current_folder_id, folder_in, session)
+    return await crud.update_folder(
+        current_folder_id,
+        folder_in,
+        current_user.id,
+        session,
+    )

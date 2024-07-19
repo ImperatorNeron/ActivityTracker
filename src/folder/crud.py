@@ -1,6 +1,8 @@
 from typing import List, TYPE_CHECKING, Optional
 
+from fastapi import HTTPException
 from sqlalchemy import select
+from fastapi import status
 from src.folder.models import Folder
 from src.folder.schemas import FolderCreate, FolderUpdate
 
@@ -30,9 +32,10 @@ async def create_folder(
 async def update_folder(
     current_folder_id: int,
     upd_folder: FolderUpdate,
+    user_id: int,
     session: "AsyncSession",
 ):
-    current_folder = await get_folder_by_id(current_folder_id, session)
+    current_folder = await get_folder_by_id(current_folder_id, user_id, session)
     # exclude_unset for removing such things: title=None, time=None
     for key, value in upd_folder.model_dump(exclude_unset=True).items():
         setattr(current_folder, key, value)
@@ -42,9 +45,16 @@ async def update_folder(
 
 async def get_folder_by_id(
     current_folder_id: int,
+    user_id: int,
     session: "AsyncSession",
 ) -> Optional[Folder]:
-    return await session.get(
+    folder = await session.get(
         Folder,
         current_folder_id,
+    )
+    if folder.user_id == user_id:
+        return folder
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"You don`t have such folder!",
     )
