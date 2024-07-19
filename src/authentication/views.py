@@ -17,3 +17,7 @@ router.include_router(
 router.include_router(
     router=fastapi_users_routers.get_verify_router(UserRead)
 )
+
+router.include_router(
+    router=fastapi_users_routers.get_reset_password_router()
+)
