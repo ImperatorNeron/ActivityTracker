@@ -1,10 +1,14 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String, ForeignKey, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src import TaskTrackerBaseModel
+from src.core.models import TaskTrackerBaseModel
 from src.core.mixins import IdIntPkMixin, UserRelationMixin
+
+if TYPE_CHECKING:
+    from src.folder.models import Folder
 
 
 class Task(TaskTrackerBaseModel, UserRelationMixin, IdIntPkMixin):
@@ -27,7 +31,7 @@ class Task(TaskTrackerBaseModel, UserRelationMixin, IdIntPkMixin):
     finish_date: Mapped[datetime] = mapped_column("finish_date", nullable=True)
 
     folder_id: Mapped[int] = mapped_column(ForeignKey("folders.id"), nullable=True)
-    folder = relationship("Folder", _back_populates)
+    folder: Mapped["Folder"] = relationship("Folder", back_populates=_back_populates)
 
     __table_args__ = (
         CheckConstraint(
