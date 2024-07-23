@@ -3,7 +3,8 @@ __all__ = (
     "TaskTrackerBaseModel",
     "User",
     "AccessToken",
-    "UOM"
+    "UOM",
+    "Task",
 )
 
 from src.authentication.models import AccessToken
@@ -12,3 +13,4 @@ from src.core.models import TaskTrackerBaseModel
 from src.user.models import User
 from src.uom.models import UOM
 from src.folder.models import Folder
+from src.task.models import Task
