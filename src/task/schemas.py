@@ -30,4 +30,4 @@ class UpdateTask(TaskBase):
     goal_value: Optional[float] = None
     start_date: Optional[datetime] = None
     finish_date: Optional[datetime] = None
-    folder_id: Optional[datetime] = None
+    folder_id: Optional[int] = None
