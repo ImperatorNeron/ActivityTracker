@@ -57,3 +57,23 @@ async def delete_item_by_user_id(
     await session.delete(await get_user_item_by_id(entity, item_id, user_id, session))
     await session.commit()
     return {"status_code": status.HTTP_204_NO_CONTENT}
+
+
+async def update_user_item_by_id(
+    entity: Any,
+    current_item_id: int,
+    item_in: Any,
+    user_id: int,
+    session: AsyncSession,
+):
+    current_item = await get_user_item_by_id(
+        entity,
+        current_item_id,
+        user_id,
+        session,
+    )
+
+    for key, value in item_in.model_dump(exclude_unset=True).items():
+        setattr(current_item, key, value)
+    await session.commit()
+    return current_item
