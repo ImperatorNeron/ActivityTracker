@@ -4,13 +4,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import Task
+from src.core import crud
 
 if TYPE_CHECKING:
     from sqlalchemy import Result
 
 
 async def get_tasks(user_id: int, session: AsyncSession) -> List["Task"]:
-    result: "Result" = await session.execute(
-        select(Task).where(Task.user_id == user_id).order_by(Task.id)
-    )
-    return list(result.scalars().all())
+    return await crud.get_items_by_user_id(Task, user_id, session)
