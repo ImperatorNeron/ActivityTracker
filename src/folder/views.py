@@ -2,8 +2,14 @@ from typing import List, Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import database_helper, User
+from src import database_helper, User, Folder
 from src.authentication.dependencies.fastapi_users_routers import current_active_user
+from src.core.crud import (
+    get_user_item_by_id,
+    create_item_by_user_id,
+    get_items_by_user_id,
+    delete_item_by_user_id,
+)
 from src.folder import crud
 from src.folder.schemas import FolderRead, FolderCreate, FolderUpdate
 
@@ -24,7 +30,11 @@ async def get_folders(
         Depends(database_helper.session_getter),
     ],
 ):
-    return await crud.get_folders(current_user.id, session)
+    return await get_items_by_user_id(
+        Folder,
+        current_user.id,
+        session,
+    )
 
 
 @router.post("/", response_model=FolderRead)
@@ -39,7 +49,8 @@ async def create_folder(
         Depends(current_active_user),
     ],
 ):
-    return await crud.create_folder(
+    return await create_item_by_user_id(
+        Folder,
         folder_in,
         current_user.id,
         session,
@@ -58,10 +69,8 @@ async def get_folder(
         Depends(current_active_user),
     ],
 ):
-    return await crud.get_folder_by_id(
-        current_folder_id,
-        current_user.id,
-        session,
+    return await get_user_item_by_id(
+        Folder, current_folder_id, current_user.id, session
     )
 
 
@@ -84,3 +93,18 @@ async def update_folder(
         current_user.id,
         session,
     )
+
+
+@router.delete("/delete/{folder_id}")
+async def delete_folder(
+    folder_id: int,
+    session: Annotated[
+        AsyncSession,
+        Depends(database_helper.session_getter),
+    ],
+    current_user: Annotated[  # noqa
+        User,
+        Depends(current_active_user),
+    ],
+):
+    return await delete_item_by_user_id(Folder, folder_id, current_user.id, session)
