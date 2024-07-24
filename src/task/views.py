@@ -10,9 +10,10 @@ from src.core.crud import (
     delete_item_by_user_id,
     create_item_by_user_id,
     get_items_by_user_id,
+    update_user_item_by_id,
 )
 from src.core.database_helper import database_helper
-from src.task.schemas import ReadTask, CreateTask
+from src.task.schemas import ReadTask, CreateTask, UpdateTask
 
 router = APIRouter(
     prefix="/tasks",
@@ -64,9 +65,10 @@ async def get_task_by_id(
     return await get_user_item_by_id(Task, task_id, current_user.id, session)
 
 
-@router.delete("/delete/{task_id}")
-async def delete_task(
+@router.patch("/{task_id}", response_model=ReadTask)
+async def update_task(
     task_id: int,
+    task_in: UpdateTask,
     session: Annotated[
         AsyncSession,
         Depends(database_helper.session_getter),
@@ -76,4 +78,26 @@ async def delete_task(
         Depends(current_active_user),
     ],
 ):
-    return await delete_item_by_user_id(Task, task_id, current_user.id, session)
+    return await update_user_item_by_id(
+        Task, task_id, task_in, current_user.id, session
+    )
+
+
+@router.delete("/delete/{task_id}")
+async def delete_task(
+    current_task_id: int,
+    session: Annotated[
+        AsyncSession,
+        Depends(database_helper.session_getter),
+    ],
+    current_user: Annotated[  # noqa
+        User,
+        Depends(current_active_user),
+    ],
+):
+    return await delete_item_by_user_id(
+        Task,
+        current_task_id,
+        current_user.id,
+        session,
+    )
