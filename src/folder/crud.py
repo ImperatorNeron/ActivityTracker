@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from fastapi import status
 
 from src.core import crud
+from src.core.crud import create_item_by_user_id
 from src.folder.models import Folder
 from src.folder.schemas import FolderCreate, FolderUpdate
 
@@ -20,10 +21,7 @@ async def create_folder(
     user_id: int,
     session: "AsyncSession",
 ) -> Folder:
-    folder = Folder(**folder_in.model_dump(), user_id=user_id)
-    session.add(folder)
-    await session.commit()
-    return folder
+    return await create_item_by_user_id(Folder, folder_in, user_id, session)
 
 
 async def update_folder(

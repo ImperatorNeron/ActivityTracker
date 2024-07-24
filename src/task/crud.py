@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import Task
 from src.core import crud
+from src.core.crud import create_item_by_user_id
 from src.task.schemas import CreateTask
 
 
@@ -16,7 +17,4 @@ async def create_task(
     user_id: int,
     session: AsyncSession,
 ) -> Task:
-    task = Task(**task_in.model_dump(), user_id=user_id)
-    session.add(task)
-    await session.commit()
-    return task
+    return await create_item_by_user_id(Task, task_in, user_id, session)
