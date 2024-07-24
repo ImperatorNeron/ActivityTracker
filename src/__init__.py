@@ -5,6 +5,7 @@ __all__ = (
     "AccessToken",
     "UOM",
     "Task",
+    "Folder"
 )
 
 from src.authentication.models import AccessToken
