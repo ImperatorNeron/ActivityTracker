@@ -8,8 +8,10 @@ from src.core.crud import (
     get_user_item_by_id,
     create_item_by_user_id,
     get_items_by_user_id,
-    delete_item_by_user_id, update_user_item_by_id,
+    delete_item_by_user_id,
+    update_user_item_by_id,
 )
+from src.folder.crud import delete_tasks_and_folder
 from src.folder.schemas import FolderRead, FolderCreate, FolderUpdate
 
 router = APIRouter(
@@ -93,6 +95,21 @@ async def update_folder(
         current_user.id,
         session,
     )
+
+
+@router.delete("/delete-all/{folder_id}")
+async def delete_tasks_with_folder(
+    folder_id: int,
+    session: Annotated[
+        AsyncSession,
+        Depends(database_helper.session_getter),
+    ],
+    current_user: Annotated[  # noqa
+        User,
+        Depends(current_active_user),
+    ],
+):
+    return await delete_tasks_and_folder(folder_id, current_user.id, session)
 
 
 @router.delete("/delete/{folder_id}")
