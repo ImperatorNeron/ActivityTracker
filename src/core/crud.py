@@ -40,7 +40,7 @@ async def get_user_item_by_id(
         entity,
         item_id,
     )
-    if item.user_id == user_id:
+    if item and item.user_id == user_id:
         return item
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
