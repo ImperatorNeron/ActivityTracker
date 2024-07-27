@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 load_dotenv()
 
 
-class DatabaseSettings(BaseModel):
+class DatabaseBaseSettings(BaseModel):
     url: str
     echo: bool = False
     echo_pool: bool = False
@@ -19,6 +19,14 @@ class DatabaseSettings(BaseModel):
         "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
         "pk": "pk_%(table_name)s",
     }
+
+
+class DatabaseSettings(DatabaseBaseSettings):
+    pass
+
+
+class TestDatabaseSettings(DatabaseBaseSettings):
+    pass
 
 
 class AccessTokenSettings(BaseModel):
@@ -36,6 +44,7 @@ class Settings(BaseSettings):
     )
     api_version_prefix: str = "/api/v1"
     database: DatabaseSettings
+    test_database: TestDatabaseSettings
     access_token: AccessTokenSettings
 
 
