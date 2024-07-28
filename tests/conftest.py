@@ -21,7 +21,9 @@ def auth_headers_for_user(client):
         "Content-Type": "application/x-www-form-urlencoded",
     }
     response = client.post(
-        url="/api/v1/auth/login", data=login_data, headers=headers
+        url="/api/v1/auth/login",
+        data=login_data,
+        headers=headers,
     )
     assert response.status_code == 200
     token = response.json()["access_token"]
