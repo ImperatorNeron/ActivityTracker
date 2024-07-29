@@ -1,4 +1,4 @@
-def test_create_and_delete_folder(client, auth_headers_for_user):
+def test_create_and_get_and_delete_folder(client, auth_headers_for_user):
     headers = {
         "accept": "application/json",
         **auth_headers_for_user,
