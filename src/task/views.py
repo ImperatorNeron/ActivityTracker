@@ -85,7 +85,7 @@ async def update_task(
 
 @router.delete("/delete/{task_id}")
 async def delete_task(
-    current_task_id: int,
+    task_id: int,
     session: Annotated[
         AsyncSession,
         Depends(database_helper.session_getter),
@@ -97,7 +97,7 @@ async def delete_task(
 ):
     return await delete_item_by_user_id(
         Task,
-        current_task_id,
+        task_id,
         current_user.id,
         session,
     )
