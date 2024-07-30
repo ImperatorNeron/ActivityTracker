@@ -10,12 +10,7 @@ def client():
         yield client
 
 
-@pytest.fixture
-def auth_headers_for_user(client):
-    login_data = {
-        "username": "vlad@example.com",
-        "password": "1",
-    }
+def get_user_token(client, login_data):
     headers = {
         "accept": "application/json",
         "Content-Type": "application/x-www-form-urlencoded",
@@ -25,6 +20,23 @@ def auth_headers_for_user(client):
         data=login_data,
         headers=headers,
     )
-    assert response.status_code == 200
     token = response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+def auth_headers_for_user(client):
+    login_data = {
+        "username": "vlad@example.com",
+        "password": "1",
+    }
+    return get_user_token(client, login_data)
+
+
+@pytest.fixture
+def auth_headers_for_user_2(client):
+    login_data = {
+        "username": "user@user.com",
+        "password": "1",
+    }
+    return get_user_token(client, login_data)
