@@ -1,3 +1,6 @@
+from random import random
+
+
 def test_create_and_get_and_delete_folder(client, auth_headers_for_user):
     headers = {
         "accept": "application/json",
@@ -5,7 +8,7 @@ def test_create_and_get_and_delete_folder(client, auth_headers_for_user):
     }
 
     folder_data = {
-        "title": "Test folder",
+        "title": f"Test folder {random()}",
         "description": "my test folder",
         "tasks_quantity": 0,
     }

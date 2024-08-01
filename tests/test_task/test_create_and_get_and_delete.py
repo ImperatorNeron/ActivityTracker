@@ -1,10 +1,13 @@
+from random import random
+
+
 def get_task_test_data(**kwargs):
     return {"title": "Test task 2", "start_value": 10, "goal_value": 100, **kwargs}
 
 
 def get_folder_test_data():
     return {
-        "title": "Test folder",
+        "title": f"Test folder {random()}",
         "description": "my test folder",
         "tasks_quantity": 0,
     }
