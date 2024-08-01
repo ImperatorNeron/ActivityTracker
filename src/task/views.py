@@ -78,9 +78,7 @@ async def update_task(
         Depends(current_active_user),
     ],
 ):
-    return await update_user_item_by_id(
-        Task, task_id, task_in, current_user.id, session
-    )
+    return await crud.update_task(task_id, task_in, current_user.id, session)
 
 
 @router.delete("/delete/{task_id}")
