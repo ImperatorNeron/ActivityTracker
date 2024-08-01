@@ -2,7 +2,7 @@ from random import random
 
 
 def get_task_test_data(**kwargs):
-    return {"title": "Test task 2", "start_value": 10, "goal_value": 100, **kwargs}
+    return {"title": f"Test task {random()}", "start_value": 10, "goal_value": 100, **kwargs}
 
 
 def get_folder_test_data():
