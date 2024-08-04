@@ -5,7 +5,8 @@ __all__ = (
     "AccessToken",
     "UOM",
     "Task",
-    "Folder"
+    "Folder",
+    "Activity"
 )
 
 from src.authentication.models import AccessToken
@@ -15,3 +16,4 @@ from src.user.models import User
 from src.uom.models import UOM
 from src.folder.models import Folder
 from src.task.models import Task
+from src.activity.models import Activity
