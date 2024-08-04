@@ -9,6 +9,7 @@ from src.core.mixins import IdIntPkMixin, UserRelationMixin
 
 if TYPE_CHECKING:
     from src.folder.models import Folder
+    from src.activity.models import Activity
 
 
 class Task(TaskTrackerBaseModel, UserRelationMixin, IdIntPkMixin):
@@ -32,6 +33,8 @@ class Task(TaskTrackerBaseModel, UserRelationMixin, IdIntPkMixin):
 
     folder_id: Mapped[int] = mapped_column(ForeignKey("folders.id"), nullable=True)
     folder: Mapped["Folder"] = relationship("Folder", back_populates=_back_populates)
+
+    activities: Mapped["Activity"] = relationship("Activity", back_populates="task")
 
     __table_args__ = (
         CheckConstraint(
