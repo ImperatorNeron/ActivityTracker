@@ -20,6 +20,26 @@ def test_create_task_in_nonexistent_folder(client, auth_headers_for_user):
     assert response.status_code == 404
 
 
+def test_create_task_in_zero_id_folder(client, auth_headers_for_user):
+    headers = {"accept": "application/json", **auth_headers_for_user}
+    response = client.post(
+        "/api/v1/tasks/",
+        json=get_task_test_data(folder_id=0),
+        headers=headers,
+    )
+    assert response.status_code == 404
+
+
+def test_create_task_in_minus_is_folder(client, auth_headers_for_user):
+    headers = {"accept": "application/json", **auth_headers_for_user}
+    response = client.post(
+        "/api/v1/tasks/",
+        json=get_task_test_data(folder_id=-15),
+        headers=headers,
+    )
+    assert response.status_code == 422
+
+
 def test_create_task_in_another_user_folder(
     client,
     auth_headers_for_user,
