@@ -10,7 +10,7 @@ async def create_task(
     user_id: int,
     session: AsyncSession,
 ) -> Task:
-    if task_in.folder_id:
+    if task_in.folder_id is not None:
         await get_user_item_by_id(Folder, task_in.folder_id, user_id, session)
     return await create_item_by_user_id(Task, task_in, user_id, session)
 
