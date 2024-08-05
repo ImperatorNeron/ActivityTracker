@@ -9,8 +9,8 @@ class TaskBase(BaseModel):
     description: Optional[str] = None
     start_value: float = Field(ge=0, default=0)
     goal_value: float = Field(ge=0)
-    start_date: Optional[datetime] = None
-    finish_date: Optional[datetime] = None
+    start_date: Optional[datetime] = Field(None, examples=["2024-08-04T15:02:36.351052"])
+    finish_date: Optional[datetime] = Field(None, examples=["2024-08-04T15:02:36.351052"])
     folder_id: Optional[int] = Field(ge=0, default=None)
 
 
